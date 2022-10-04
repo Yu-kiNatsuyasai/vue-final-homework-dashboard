@@ -2,7 +2,9 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-link to="/login">登入</router-link>
   </div>
+
 </template>
 
 <script>
@@ -15,7 +17,7 @@ export default {
     HelloWorld
   },
   created () {
-    console.log(process.env.VUE_APP_PATH)
+    // console.log(process.env.VUE_APP_PATH)
   }
 }
 </script>

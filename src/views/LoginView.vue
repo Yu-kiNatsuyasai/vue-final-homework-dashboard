@@ -61,7 +61,7 @@ export default {
           // 將token與到期日加入cookie
           document.cookie = `hexToken=${token}; expires=${new Date(expired)}`
           // 轉址到Dashboard
-          this.$router.push('/dashboard')
+          this.$router.push('/dashboard/products')
         }
       }).catch(err => {
         console.log(err)
