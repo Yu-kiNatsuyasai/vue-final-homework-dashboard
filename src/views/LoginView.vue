@@ -43,8 +43,8 @@ export default {
     return {
       // 登入使用者資訊
       user: {
-        username: 'hexscholl@test.com',
-        password: 'zzxxccvv'
+        username: `${process.env.VUE_APP_ACCOUNT}`,
+        password: `${process.env.VUE_APP_PASSWORD}`
       }
     }
   },
@@ -62,6 +62,9 @@ export default {
           document.cookie = `hexToken=${token}; expires=${new Date(expired)}`
           // 轉址到Dashboard
           this.$router.push('/dashboard/products')
+        } else {
+          console.log(res.data.error)
+          alert(res.data.message + '，' + res.data.error.message)
         }
       }).catch(err => {
         console.log(err)
