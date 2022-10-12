@@ -46,7 +46,7 @@
                 ref="fileInput"
                 @change="uploadFile"/>
               </div>
-              <img class="img-fluid" alt="" />
+              <img class="img-fluid" :src="tempProduct.imageUrl" :alt="tempProduct.title"/>
               <!-- 延伸技巧，多圖 -->
               <div class="mt-5">
                 <div class="mb-3 input-group">

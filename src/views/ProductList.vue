@@ -1,4 +1,5 @@
 <template>
+  <VLoading :active="isLoading"></VLoading>
   <div class="text-end">
     <button class="btn btn-primary" type="button" @click="openModal(true)">
       增加一個產品
@@ -72,11 +73,13 @@ export default {
       products: [],
       pagination: {},
       tempProduct: {},
-      isNew: false
+      isNew: false,
+      isLoading: false
     }
   },
   methods: {
     getProducts () {
+      this.isLoading = true
       const apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products`
       this.$http
         .get(apiUrl)
@@ -88,10 +91,12 @@ export default {
             console.log(res.data.error)
             alert(res.data.message + '，' + res.data.error.message)
           }
+          this.isLoading = false
         })
         .catch((err) => {
           console.log(err)
           alert('')
+          this.isLoading = false
         })
     },
     openModal (isNew, item) {
@@ -105,6 +110,7 @@ export default {
       this.$refs.productModal.showModal() // 打開視窗
     },
     updateProduct (item) {
+      this.isLoading = true
       // API路徑(編輯時)
       let apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
       let httpMethod = 'put'
@@ -124,9 +130,11 @@ export default {
             console.log(res.data)
             alert(res.data.message)
           }
+          this.isLoading = false
         })
         .catch((err) => {
           console.log(err)
+          this.isLoading = false
         })
     },
     openDelModal (item) {
@@ -135,6 +143,7 @@ export default {
       this.$refs.delModal.showModal()
     },
     delProduct (item) {
+      this.isLoading = true
       const apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
       this.$http.delete(apiUrl)
         .then(res => {
@@ -146,10 +155,12 @@ export default {
             console.log(res.data.error)
             alert(res.data.message + '，' + res.data.error.message)
           }
+          this.isLoading = false
         })
         .catch(err => {
           console.log(err)
           alert('')
+          this.isLoading = false
         })
     }
   },
