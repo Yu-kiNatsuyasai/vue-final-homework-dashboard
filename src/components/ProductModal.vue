@@ -40,7 +40,11 @@
                   >或 上傳圖片
                   <i class="fas fa-spinner fa-spin"></i>
                 </label>
-                <input type="file" id="customFile" class="form-control" />
+                <input type="file"
+                id="customFile"
+                class="form-control"
+                ref="fileInput"
+                @change="uploadFile"/>
               </div>
               <img class="img-fluid" alt="" />
               <!-- 延伸技巧，多圖 -->
@@ -191,8 +195,10 @@
 </template>
 
 <script>
-import Modal from 'bootstrap/js/dist/modal.js'
+import modalMixin from '@/mixins/modalMixin'
+
 export default {
+  mixins: [modalMixin],
   props: {
     product: {
       type: Object,
@@ -217,15 +223,27 @@ export default {
     }
   },
   methods: {
-    showModal () {
-      this.modal.show()
-    },
-    hideModal () {
-      this.modal.hide()
+    uploadFile () {
+      const uploadFile = this.$refs.fileInput.files[0]
+      // console.dir(uploadFile)
+      const formData = new FormData()
+      formData.append('file-to-upload', uploadFile)
+      const apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
+      this.$http.post(apiUrl, formData)
+        .then(res => {
+          if (res.data.success) {
+            this.tempProduct.imageUrl = res.data.imageUrl
+            // console.log(res.data)
+          } else {
+            console.log(res.data.error)
+            alert(res.data.message + '，' + res.data.error.message)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          alert('')
+        })
     }
-  },
-  mounted () {
-    this.modal = new Modal(this.$refs.modal)
   },
   watch: {
     product () {

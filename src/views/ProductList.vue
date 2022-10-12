@@ -38,7 +38,10 @@
             >
               編輯
             </button>
-            <button class="btn btn-outline-danger btn-sm">刪除</button>
+            <button
+              class="btn btn-outline-danger btn-sm"
+              @click="openDelModal(product)">刪除
+            </button>
           </div>
         </td>
       </tr>
@@ -49,13 +52,20 @@
     :product="tempProduct"
     @update-product="updateProduct"
   ></product-modal>
+  <del-modal
+    ref="delModal"
+    :product="tempProduct"
+    @del-product="delProduct">
+  </del-modal>
 </template>
 
 <script>
 import ProductModal from '../components/ProductModal.vue'
+import DelModal from '../components/DelModal.vue'
 export default {
   components: {
-    ProductModal
+    ProductModal,
+    DelModal
   },
   data () {
     return {
@@ -85,13 +95,14 @@ export default {
         })
     },
     openModal (isNew, item) {
+      // 若非新增則傳入現有商品
       if (isNew) {
         this.tempProduct = {}
       } else {
         this.tempProduct = { ...item }
       }
       this.isNew = isNew
-      this.$refs.productModal.showModal()
+      this.$refs.productModal.showModal() // 打開視窗
     },
     updateProduct (item) {
       // API路徑(編輯時)
@@ -106,7 +117,7 @@ export default {
       this.$http[httpMethod](apiUrl, { data: item })
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data)
+            // console.log(res.data)
             this.$refs.productModal.hideModal() // 關閉輸入視窗
             this.getProducts() // 重新取得清單
           } else {
@@ -116,6 +127,29 @@ export default {
         })
         .catch((err) => {
           console.log(err)
+        })
+    },
+    openDelModal (item) {
+      // 打開刪除視窗
+      this.tempProduct = { ...item }
+      this.$refs.delModal.showModal()
+    },
+    delProduct (item) {
+      const apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
+      this.$http.delete(apiUrl)
+        .then(res => {
+          if (res.data.success) {
+            // console.log(res.data)
+            this.$refs.delModal.hideModal() // 關閉刪除視窗
+            this.getProducts() // 重新取得清單
+          } else {
+            console.log(res.data.error)
+            alert(res.data.message + '，' + res.data.error.message)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          alert('')
         })
     }
   },
