@@ -1,13 +1,22 @@
 <template>
   <Navbar></Navbar>
+  <ToastMessages></ToastMessages>
   <router-view />
 </template>
 
 <script>
 import Navbar from '@/components/NavbarComponent.vue'
+import emitter from '@/methods/emitter'
+import ToastMessages from '../components/ToastMessages.vue'
 export default {
   components: {
-    Navbar
+    Navbar,
+    ToastMessages
+  },
+  provide () {
+    return {
+      emitter
+    }
   },
   created () {
     // 取出cookie中的token

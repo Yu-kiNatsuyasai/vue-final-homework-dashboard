@@ -63,11 +63,13 @@
 <script>
 import ProductModal from '../components/ProductModal.vue'
 import DelModal from '../components/DelModal.vue'
+
 export default {
   components: {
     ProductModal,
     DelModal
   },
+  inject: ['emitter'],
   data () {
     return {
       products: [],
@@ -126,9 +128,17 @@ export default {
             // console.log(res.data)
             this.$refs.productModal.hideModal() // 關閉輸入視窗
             this.getProducts() // 重新取得清單
+            this.emitter.emit('push-message', { // 推送成功訊息
+              style: 'success',
+              title: '更新成功'
+            })
           } else {
-            console.log(res.data)
-            alert(res.data.message)
+            // console.log(res.data)
+            this.emitter.emit('push-message', { // 推送失敗訊息
+              style: 'danger',
+              title: '更新失敗',
+              content: res.data.message.join('、')
+            })
           }
           this.isLoading = false
         })
@@ -151,15 +161,22 @@ export default {
             // console.log(res.data)
             this.$refs.delModal.hideModal() // 關閉刪除視窗
             this.getProducts() // 重新取得清單
+            this.emitter.emit('push-message', { // 推送成功訊息
+              style: 'success',
+              title: '刪除成功'
+            })
           } else {
-            console.log(res.data.error)
-            alert(res.data.message + '，' + res.data.error.message)
+            // console.log(res.data.error)
+            this.emitter.emit('push-message', { // 推送失敗訊息
+              style: 'danger',
+              title: '刪除失敗',
+              content: res.data.message.join('、')
+            })
           }
           this.isLoading = false
         })
         .catch(err => {
           console.log(err)
-          alert('')
           this.isLoading = false
         })
     }
