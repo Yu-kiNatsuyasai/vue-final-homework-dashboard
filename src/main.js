@@ -9,6 +9,7 @@ import { localize, setLocale } from '@vee-validate/i18n'
 import zhTw from '@vee-validate/i18n/dist/locale/zh_TW.json'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
+import { currency } from '@/methods/filters'
 
 // vee-vatlidate功能
 defineRule('required', required)
@@ -19,6 +20,7 @@ configure({
 setLocale('zh_TW')
 
 const app = createApp(App)
+app.config.globalProperties.$filters = { currency }
 app.use(VueAxios, axios)
 app.use(router)
 app.component('VForm', Form)
