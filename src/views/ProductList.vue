@@ -48,6 +48,10 @@
       </tr>
     </tbody>
   </table>
+  <Pagination
+    :pages="pagination"
+    @emit-pages="getProducts">
+  </Pagination>
   <product-modal
     ref="productModal"
     :product="tempProduct"
@@ -63,11 +67,13 @@
 <script>
 import ProductModal from '../components/ProductModal.vue'
 import DelModal from '../components/DelModal.vue'
+import Pagination from '../components/PaginationComponent.vue'
 
 export default {
   components: {
     ProductModal,
-    DelModal
+    DelModal,
+    Pagination
   },
   inject: ['emitter'],
   data () {
@@ -80,9 +86,9 @@ export default {
     }
   },
   methods: {
-    getProducts () {
+    getProducts (page = 1) {
       this.isLoading = true
-      const apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products`
+      const apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products/?page=${page}`
       this.$http
         .get(apiUrl)
         .then((res) => {
@@ -116,10 +122,12 @@ export default {
       // API路徑(編輯時)
       let apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
       let httpMethod = 'put'
+      let msg = '更新'
       // API路徑(新增時)
       if (this.isNew) {
         apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`
         httpMethod = 'post'
+        msg = '新增'
       }
       // 執行API
       this.$http[httpMethod](apiUrl, { data: item })
@@ -130,13 +138,13 @@ export default {
             this.getProducts() // 重新取得清單
             this.emitter.emit('push-message', { // 推送成功訊息
               style: 'success',
-              title: '更新成功'
+              title: item.title + ' ' + msg + '成功'
             })
           } else {
             // console.log(res.data)
             this.emitter.emit('push-message', { // 推送失敗訊息
               style: 'danger',
-              title: '更新失敗',
+              title: item.title + ' ' + msg + '失敗',
               content: res.data.message.join('、')
             })
           }
@@ -163,13 +171,13 @@ export default {
             this.getProducts() // 重新取得清單
             this.emitter.emit('push-message', { // 推送成功訊息
               style: 'success',
-              title: '刪除成功'
+              title: item.title + ' ' + '刪除成功'
             })
           } else {
             // console.log(res.data.error)
             this.emitter.emit('push-message', { // 推送失敗訊息
               style: 'danger',
-              title: '刪除失敗',
+              title: item.title + ' ' + '刪除失敗',
               content: res.data.message.join('、')
             })
           }
