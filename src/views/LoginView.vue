@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { ajaxStateMessage } from '@/methods/ajaxStateMessage'
 export default {
   data () {
     return {
@@ -62,10 +63,8 @@ export default {
           document.cookie = `hexToken=${token}; expires=${new Date(expired)}`
           // 轉址到Dashboard
           this.$router.push('/dashboard/products')
-        } else {
-          console.log(res.data.error)
-          alert(res.data.message + '，' + res.data.error.message)
         }
+        ajaxStateMessage(res, '登入')
       }).catch(err => {
         console.log(err)
         alert('登入時發生錯誤')

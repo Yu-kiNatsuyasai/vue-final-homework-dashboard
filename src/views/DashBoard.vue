@@ -8,6 +8,7 @@
 import Navbar from '@/components/NavbarComponent.vue'
 import emitter from '@/methods/emitter'
 import ToastMessages from '../components/ToastMessages.vue'
+import { ajaxStateMessage } from '@/methods/ajaxStateMessage'
 export default {
   components: {
     Navbar,
@@ -15,7 +16,8 @@ export default {
   },
   provide () {
     return {
-      emitter
+      emitter,
+      ajaxStateMessage
     }
   },
   created () {
