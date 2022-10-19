@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue_final_homework"]=self["webpackChunkvue_final_homework"]||[]).push([[443],{7381:function(n,e,u){u.r(e),u.d(e,{default:function(){return l}});var a=u(3396);const r={class:"about"},t=(0,a._)("h1",null,"This is an about page",-1),o=[t];function s(n,e){return(0,a.wg)(),(0,a.iD)("div",r,o)}var i=u(89);const c={},f=(0,i.Z)(c,[["render",s]]);var l=f}}]);
+//# sourceMappingURL=about.31bb8db2.js.map
